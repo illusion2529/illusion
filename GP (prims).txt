@@ -1,0 +1,172 @@
+import java.util.Scanner;
+
+public class GP {
+    private int v, j, i, c, k, min, row, col, mc;
+    private int[] a, visit;
+    private int[][] m;
+
+    public GP() {
+        v = j = c = k = min = row = col = mc = 0;
+        a = new int[10];
+        visit = new int[10];
+        m = new int[10][10];
+        for (i = 0; i < 10; i++) {
+            for (j = 0; j < 10; j++) {
+                m[i][j] = -1;
+            }
+        }
+    }
+
+    public void create() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("\nEnter the number of entries: ");
+        v = scanner.nextInt();
+        for (i = 0; i < v; i++) {
+            System.out.print("\nEnter the number: ");
+            a[i] = scanner.nextInt();
+        }
+        System.out.println("\nIf an edge is not present, enter -1");
+        for (i = 0; i < v; i++) {
+            for (j = i + 1; j < v; j++) {
+                System.out.print("\nEnter the weight of the edge between " + a[i] + " & " + a[j] + ": ");
+                c = scanner.nextInt();
+                m[i][j] = m[j][i] = c;
+            }
+        }
+    }
+
+    public void display() {
+        System.out.println();
+        for (i = 0; i < v; i++) {
+            System.out.print("\t" + a[i]);
+        }
+        System.out.println();
+        for (i = 0; i < v; i++) {
+            System.out.print(a[i] + "\t");
+            for (j = 0; j < v; j++) {
+                System.out.print(m[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+public void prims() {
+    visit = new int[v];
+    for (i = 0; i < v; i++) {
+        visit[i] = 0;
+    }
+    visit[0] = 1;
+    for (k = 0; k < v - 1; k++) {
+        min = 999;
+        for (i = 0; i < v; i++) {
+            for (j = 0; j < v; j++) {  // Modify this line
+                if (visit[i] == 1 && visit[j] == 0) {
+                    if (m[i][j] != -1 && min > m[i][j]) {
+                        min = m[i][j];
+                        row = i;
+                        col = j;
+                    }
+                }
+            }
+        }
+        System.out.println("\nMin: " + min);
+        mc = mc + min;
+        visit[col] = 1;
+        m[row][col] = -1;
+        m[col][row] = -1;
+    }
+    System.out.println("\nFinal shortest cost in the graph is: " + mc);
+}
+
+
+    public static void main(String[] args) {
+        GP g = new GP();
+        g.create();
+        g.display();
+        g.prims();
+    }
+}
+
+-----INPUT-----
+
+ gedit prims.java
+ gedit GP.java
+ javac GP.java
+ java GP
+
+
+//** Enter the number of entries: 4
+
+
+
+Enter the number: 1
+
+
+
+Enter the number: 4
+
+
+
+Enter the number: 3
+
+
+
+Enter the number: 2
+
+
+
+If an edge is not present, enter -1
+
+
+
+Enter the weight of the edge between 1 & 4: 2
+
+
+
+Enter the weight of the edge between 1 & 3: -1
+
+
+
+Enter the weight of the edge between 1 & 2: 6
+
+
+
+Enter the weight of the edge between 4 & 3: 1
+
+
+
+Enter the weight of the edge between 4 & 2: 4
+
+
+
+Enter the weight of the edge between 3 & 2: 3
+
+
+
+	1	4	3	2
+
+1	-1	2	-1	6	
+
+4	2	-1	1	4	
+
+3	-1	1	-1	3	
+
+2	6	4	3	-1	
+
+
+
+Min: 2
+
+
+
+Min: 1
+
+
+
+Min: 3
+
+
+
+Final shortest cost in the graph is: 6
+
+

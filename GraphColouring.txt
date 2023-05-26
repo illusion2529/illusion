@@ -1,0 +1,75 @@
+
+class GraphColoring:
+    def __init__(self, num_vertices):
+        self.num_vertices = num_vertices
+        self.graph = [[0] * num_vertices for _ in range(num_vertices)]
+        self.colors = [-1] * num_vertices
+        self.num_colors = 0
+
+    def is_safe(self, vertex, color):
+        for i in range(self.num_vertices):
+            if self.graph[vertex][i] == 1 and self.colors[i] == color:
+                return False
+        return True
+
+    def get_heuristic(self, vertex):
+        used_colors = set()
+        for i in range(self.num_vertices):
+            if self.graph[vertex][i] == 1 and self.colors[i] != -1:
+                used_colors.add(self.colors[i])
+        return self.num_colors - len(used_colors)
+
+    def backtracking(self, vertex):
+        if vertex == self.num_vertices:
+            return True
+
+        for color in range(self.num_colors):
+            if self.is_safe(vertex, color):
+                self.colors[vertex] = color
+
+                if self.backtracking(vertex + 1):
+                    return True
+
+                self.colors[vertex] = -1
+
+        return False
+
+    def branch_and_bound(self):
+        self.num_colors = 1
+        while not self.backtracking(0):
+            self.num_colors += 1
+
+    def solve(self):
+        self.branch_and_bound()
+
+        print("Graph Coloring Solution:")
+        for i in range(self.num_vertices):
+            print(f"Vertex {i+1} => Color {self.colors[i]+1}")
+
+
+# Example usage
+num_vertices = int(input("Enter the number of vertices: "))
+problem = GraphColoring(num_vertices)
+
+print("Enter the adjacency matrix of the graph (0 for no edge, 1 for an edge):")
+for i in range(num_vertices):
+    row = list(map(int, input().split()))
+    problem.graph[i] = row
+
+problem.solve()
+
+
+
+/* 
+Enter the number of vertices: 4
+Enter the adjacency matrix of the graph (0 for no edge, 1 for an edge):
+1 1 0 1
+1 1 1 1 
+0 1 1 1 
+1 1 1 1 
+Graph Coloring Solution:
+Vertex 1 => Color 1
+Vertex 2 => Color 2
+Vertex 3 => Color 1
+Vertex 4 => Color 3
+*/
