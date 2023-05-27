@@ -1,0 +1,69 @@
+#include &lt;iostream&gt;
+#include &lt;algorithm&gt;
+using namespace std;
+const int MAX = 1e4 + 5;
+int id[MAX], nodes, edges;
+pair &lt;long long, pair&lt;int, int&gt; &gt; p[MAX];
+void init()
+{
+for(int i = 0;i &lt; MAX;++i)
+id[i] = i;
+}
+int root(int x)
+{
+while(id[x] != x)
+{
+id[x] = id[id[x]];
+x = id[x];
+}
+return x;
+}
+void union1(int x, int y)
+{
+int p = root(x);
+int q = root(y);
+id[p] = id[q];
+}
+long long kruskal(pair&lt;long long, pair&lt;int, int&gt; &gt; p[])
+{
+int x, y;
+long long cost, minimumCost = 0;
+for(int i = 0;i &lt; edges;++i)
+{
+x = p[i].second.first;
+y = p[i].second.second;
+
+cost = p[i].first;
+if(root(x) != root(y))
+{
+minimumCost += cost;
+union1(x, y);
+}
+}
+return minimumCost;
+}
+int main()
+{
+int x, y;
+long long weight, cost, minimumCost;
+init();
+cout &lt;&lt;&quot;Enter Nodes and edges: &quot;;
+cin &gt;&gt; nodes &gt;&gt; edges;
+for(int i = 0;i &lt; edges;++i)
+{
+cout&lt;&lt;&quot;Enter the value of X, Y and edges: &quot;;
+cin &gt;&gt; x &gt;&gt; y &gt;&gt; weight;
+p[i] = make_pair(weight, make_pair(x, y));
+}
+sort(p, p + edges);
+minimumCost = kruskal(p);
+cout &lt;&lt;&quot;Minimum cost is: &quot;&lt;&lt; minimumCost &lt;&lt; endl;
+return 0;
+}
+// Enter Nodes and edges: 4 5
+// Enter the value of X, Y and edges: 0 1 10
+// Enter the value of X, Y and edges: 1 3 15
+// Enter the value of X, Y and edges: 2 3 4
+// Enter the value of X, Y and edges: 2 0 6
+// Enter the value of X, Y and edges: 0 3 5
+// Minimum cost is: 19
